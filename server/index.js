@@ -27,6 +27,12 @@ app.get("/api/tasks", (req, res) => {
     res.json(tasks)
 })
 
+app.get("/api/tasks/:id", (req, res) => {
+    const id = req.params.id
+    const task = tasks.find(t => t.id === id)
+    task ? res.status(200).json(task) : res.status(404).end("Task not found")
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
