@@ -1,20 +1,14 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 import Task from './Task'
 import AddTaskForm from './AddTaskForm'
 
 function App() {
-const [tasks, setTasks] = useState([
-    {
-      id: 1,
-      name: "Code up my website",
-      urgency: 3
-    },
-    {
-      id: 2,
-      name: "Clean my room",
-      urgency: 1
-    }
-  ])
+const [tasks, setTasks] = useState([])
+
+useEffect(() => {
+  axios.get("http://localhost:3001/tasks").then(res => setTasks(res.data))
+}, [])
 
   const [newTaskName, setNewTaskName] = useState("")
   const [newUrgency, setNewUrgency] = useState("--")
