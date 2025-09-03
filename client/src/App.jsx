@@ -24,13 +24,15 @@ useEffect(() => {
 
     if (newTaskName.trim() && newUrgency !== "--") {
       const newTask = {
-        id: tasks.length + 1,
         name: newTaskName,
         urgency: parseInt(newUrgency)
       }
-      console.log("You just added a new task!", newTask)
+
+      axios.post("http://localhost:3001/tasks", newTask).then(res => {
+        setTasks([...tasks, res.data])
+        console.log("You just added a new task!", newTask)
+      })
   
-      setTasks([...tasks, newTask])
       setNewTaskName("")
       setNewUrgency("--")
 
