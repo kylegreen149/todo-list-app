@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import Task from './Task'
+import AddTaskForm from './AddTaskForm'
 
 function App() {
 const [tasks, setTasks] = useState([
@@ -15,12 +16,40 @@ const [tasks, setTasks] = useState([
     }
   ])
 
-  // console.log(tasks)
+  const [newTaskName, setNewTaskName] = useState("")
+  const [newUrgency, setNewUrgency] = useState("--")
+
+  const handleName = (e) => {
+    // console.log(e.target.value)
+    setNewTaskName(e.target.value)
+  }
+  
+  const handleUrgency = (e) => {
+    setNewUrgency(e.target.value)
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    const newTask = {
+      id: tasks.length + 1,
+      name: newTaskName,
+      urgency: newUrgency
+    }
+    console.log("You just added a new task!", newTask)
+
+    setTasks([...tasks, newTask])
+  }
 
   return (
     <div>
       <h1>My Personal To-Do List</h1>
       <h2>Add Task That Need to be Completed Here</h2>
+      <AddTaskForm handleName={handleName} 
+        handleUrgency={handleUrgency} 
+        taskName={newTaskName} 
+        newUrgency={newUrgency} 
+        handleSubmit={handleSubmit}
+      />
       <ul>
       {tasks.map(task => <Task key={task.id} name={task.name} urgency={task.urgency}/>)}  
       </ul>
