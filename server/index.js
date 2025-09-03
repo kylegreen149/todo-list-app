@@ -33,6 +33,12 @@ app.get("/api/tasks/:id", (req, res) => {
     task ? res.status(200).json(task) : res.status(404).end("Task not found")
 })
 
+app.delete("/api/tasks/:id", (req, res) => {
+    const id = req.params.id
+    tasks = tasks.filter(t => t.id !== id)
+    res.status(204).end()
+})
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
