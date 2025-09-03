@@ -1,6 +1,8 @@
 const express = require('express') // Used to import express
 const app = express() // Function that is used to create an Express application stored in the app variable
 
+app.use(express.json()) // Middleware that parses incoming requests with JSON payloads to access data easily
+
 let tasks = [
     {
         id: "1",
@@ -31,6 +33,22 @@ app.get("/api/tasks/:id", (req, res) => {
     const id = req.params.id
     const task = tasks.find(t => t.id === id)
     task ? res.status(200).json(task) : res.status(404).end("Task not found")
+})
+
+app.post("/api/tasks", (req, res) => {
+    const body = req.body // The body of the request can be accessed through the request object
+    // console.log(body)
+    if (!body.name || !body.urgency) {
+        return res.status(400).json({ error: "name or urgency missing" })
+    }
+    const task = {
+        id: (tasks.length + 1).toString(),
+        name: body.name,
+        urgency: body.urgency
+    }
+    tasks = tasks.concat(task)
+    res.status(201).json(task)
+    console.log(task)
 })
 
 app.delete("/api/tasks/:id", (req, res) => {
