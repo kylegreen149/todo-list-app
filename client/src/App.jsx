@@ -48,6 +48,10 @@ const [tasks, setTasks] = useState([
     }
   }
 
+  const updateTask = (updatedTask) => {
+    setTasks(prevTasks => prevTasks.map(task => task.id === updatedTask.id ? updatedTask : task))
+  }
+
   const deleteTask = (id) => {
     const deletedTask = tasks.find(task => task.id === id)
     const comfirmDelete = window.confirm("Are you sure you want to delete this task?")
@@ -69,7 +73,7 @@ const [tasks, setTasks] = useState([
         handleSubmit={handleSubmit}
       />
       <ul>
-      {tasks.map(task => <Task key={task.id} name={task.name} urgency={task.urgency} deleteTask={() => deleteTask(task.id)}/>)} 
+      {tasks.map(task => <Task key={task.id} task={task} deleteTask={() => deleteTask(task.id)} updateTask={updateTask}/>)}  
       </ul>
     </div>
   )
