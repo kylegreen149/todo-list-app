@@ -57,6 +57,13 @@ app.delete("/api/tasks/:id", (req, res) => {
     res.status(204).end()
 })
 
+// Put this middleware after all request in case all fail, shown if link is invalid
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
 const PORT = 3001
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`)
