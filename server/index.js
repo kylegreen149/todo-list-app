@@ -1,28 +1,33 @@
-const http = require('http')
+const express = require('express') // Used to import express
+const app = express() // Function that is used to create an Express application stored in the app variable
 
 let tasks = [
     {
         id: "1",
-        title: "Make dinner",
+        name: "Make dinner",
         urgency: 2
     },
     {
         id: "2",
-        title: "Do laundry",
+        name: "Do laundry",
         urgency: 1
     },
     {
         id: "3",
-        title: "Prepare presentation",
+        name: "Prepare presentation",
         urgency: 3
     }
 ]
 
-const app = http.createServer((req, res) => {
-    res.writeHead(200, { 'Content-Type': 'application/json' })
-    res.end(JSON.stringify(tasks))
+app.get("/", (req, res) => {
+    res.send("<p>Hello World!</>")
+})
+
+app.get("/api/tasks", (req, res) => {
+    res.json(tasks)
 })
 
 const PORT = 3001
-app.listen(PORT)
-console.log(`Server running on port ${PORT}`)
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`)
+})
