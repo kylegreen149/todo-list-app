@@ -62,6 +62,11 @@ const [tasks, setTasks] = useState([
     }
   }
 
+  const deleteAllTasks = () => {
+    const confirmDelete = window.confirm("Are you sure you want to delete all tasks?")
+    confirmDelete && setTasks([])
+  }
+
   return (
     <div>
       <h1>My Personal To-Do List</h1>
@@ -72,6 +77,8 @@ const [tasks, setTasks] = useState([
         newUrgency={newUrgency} 
         handleSubmit={handleSubmit}
       />
+      {tasks.length > 0 && <button onClick={deleteAllTasks}>Delete All Tasks</button>}
+      {tasks.length === 0 && <h3>No tasks available</h3>}
       <ul>
       {tasks.map(task => <Task key={task.id} task={task} deleteTask={() => deleteTask(task.id)} updateTask={updateTask}/>)}  
       </ul>
