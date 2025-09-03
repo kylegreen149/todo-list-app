@@ -56,9 +56,13 @@ useEffect(() => {
     }
   }
 
-  const deleteAllTasks = () => {
+  const deleteAllTasks = async () => {
     const confirmDelete = window.confirm("Are you sure you want to delete all tasks?")
-    confirmDelete && setTasks([])
+    //JSON can't delete everything at once, so map over everything one by one (O(n))
+    if (confirmDelete) {
+      await Promise.all(tasks.map(task => axios.delete(`http://localhost:3001/tasks/${task.id}`)))
+      setTasks([])
+    }
   }
 
   const sortedTasks = tasks.slice().sort((a,b) => {
