@@ -30,14 +30,22 @@ const [tasks, setTasks] = useState([
 
   const handleSubmit = (e) => {
     e.preventDefault()
-    const newTask = {
-      id: tasks.length + 1,
-      name: newTaskName,
-      urgency: newUrgency
-    }
-    console.log("You just added a new task!", newTask)
 
-    setTasks([...tasks, newTask])
+    if (newTaskName.trim() && newUrgency !== "--") {
+      const newTask = {
+        id: tasks.length + 1,
+        name: newTaskName,
+        urgency: parseInt(newUrgency)
+      }
+      console.log("You just added a new task!", newTask)
+  
+      setTasks([...tasks, newTask])
+      setNewTaskName("")
+      setNewUrgency("--")
+      
+    } else {
+      alert("Fill out all fields, and select a level of urgency")
+    }
   }
 
   return (

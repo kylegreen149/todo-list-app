@@ -3,9 +3,9 @@ const AddTaskForm = ({handleName, handleUrgency, taskName, newUrgency, handleSub
     // console.log(newUrgency)
     return (
         <form onSubmit={handleSubmit}>
-            <input placeholder="Add Task Here" onChange={handleName} value={taskName}/>
+            <input placeholder="Add Task Here" onChange={handleName} value={taskName} required/>
             <label>Level of Urgency</label>
-            <select onChange={handleUrgency} value={newUrgency}>
+            <select onChange={handleUrgency} value={newUrgency} required>
                 <option>--</option>
                 <option>1</option>
                 <option>2</option>
