@@ -5,7 +5,7 @@ import AddTaskForm from './AddTaskForm'
 
 function App() {
 const [tasks, setTasks] = useState([])
-const baseURL = "http://localhost:3001/api/tasks"
+const baseURL = "/api/tasks"
 
 useEffect(() => {
   axios.get(baseURL).then(res => setTasks(res.data))
