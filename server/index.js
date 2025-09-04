@@ -5,8 +5,8 @@ app.use(express.json()) // Middleware that parses incoming requests with JSON pa
 
 app.use(express.static('dist')) // Serve static files from the 'dist' directory
 
-const cors = require('cors') // Import CORS package to handle cross-origin requests
-app.use(cors()) // Use CORS middleware to allow cross-origin requests
+// const cors = require('cors') // Import CORS package to handle cross-origin requests
+// app.use(cors()) // Use CORS middleware to allow cross-origin requests
 
 let tasks = [
     {
