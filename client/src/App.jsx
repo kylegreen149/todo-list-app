@@ -5,9 +5,10 @@ import AddTaskForm from './AddTaskForm'
 
 function App() {
 const [tasks, setTasks] = useState([])
+const baseURL = "http://localhost:3001/api/tasks"
 
 useEffect(() => {
-  axios.get("http://localhost:3001/tasks").then(res => setTasks(res.data))
+  axios.get(baseURL).then(res => setTasks(res.data))
 }, [])
 
   const [newTaskName, setNewTaskName] = useState("")
@@ -28,7 +29,7 @@ useEffect(() => {
         urgency: parseInt(newUrgency)
       }
 
-      axios.post("http://localhost:3001/tasks", newTask).then(res => {
+      axios.post(baseURL, newTask).then(res => {
         setTasks([...tasks, res.data])
         console.log("You just added a new task!", newTask)
       })
@@ -49,7 +50,7 @@ useEffect(() => {
     const deletedTask = tasks.find(task => task.id === id)
     const comfirmDelete = window.confirm("Are you sure you want to delete this task?")
     if (comfirmDelete) {
-      axios.delete(`http://localhost:3001/tasks/${id}`).then(() => {
+      axios.delete(`${baseURL}/${id}`).then(() => {
         console.log("Successfully deleted task:", deletedTask.name)
         setTasks(tasks.filter(task => task.id !== id))
       })
@@ -60,7 +61,7 @@ useEffect(() => {
     const confirmDelete = window.confirm("Are you sure you want to delete all tasks?")
     //JSON can't delete everything at once, so map over everything one by one (O(n))
     if (confirmDelete) {
-      await Promise.all(tasks.map(task => axios.delete(`http://localhost:3001/tasks/${task.id}`)))
+      await Promise.all(tasks.map(task => axios.delete(`${baseURL}/${task.id}`)))
       setTasks([])
     }
   }
@@ -95,7 +96,7 @@ useEffect(() => {
       )}
       {sortedTasks.length === 0 && <h3>No tasks available</h3>}
       <ul>
-      {sortedTasks.map(task => <Task key={task.id} task={task} deleteTask={() => deleteTask(task.id)} updateTask={updateTask}/>)}  
+      {sortedTasks.map(task => <Task key={task.id} task={task} deleteTask={() => deleteTask(task.id)} updateTask={updateTask} url={baseURL} />)}  
       </ul>
     </div>
   )

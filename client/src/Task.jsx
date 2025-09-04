@@ -2,14 +2,14 @@ import { useState } from "react"
 import axios from "axios"
 import EditTask from "./EditTask"
 
-const Task = ({task, deleteTask, updateTask}) => {
+const Task = ({task, deleteTask, updateTask, url}) => {
     const [isEditing, setIsEditing] = useState(false)
     const [editTask, setEditTask] = useState(task.name)
 
     const handleEdit = () => setIsEditing(true)
     const handleCancel = () => {setIsEditing(false); setEditTask(task.name)}
     const handleSave = (updatedName) => {
-        axios.put(`http://localhost:3001/tasks/${task.id}`, { ...task, name: updatedName }).then((res) => {
+        axios.put(`${url}/${task.id}`, { ...task, name: updatedName }).then((res) => {
             // console.log(res.data)
             updateTask(res.data)
             setIsEditing(false)

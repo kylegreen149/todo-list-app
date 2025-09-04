@@ -3,6 +3,9 @@ const app = express() // Function that is used to create an Express application 
 
 app.use(express.json()) // Middleware that parses incoming requests with JSON payloads to access data easily
 
+const cors = require('cors') // Import CORS package to handle cross-origin requests
+app.use(cors()) // Use CORS middleware to allow cross-origin requests
+
 let tasks = [
     {
         id: "1",
