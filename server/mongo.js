@@ -20,12 +20,21 @@ const taskSchema = new mongoose.Schema({
 
 const Task = mongoose.model('Task', taskSchema)
 
-const task = new Task({
-  name: 'Clean the stove',
-  urgency: 1,
+// const task = new Task({
+//   name: 'Clean the stove',
+//   urgency: 1,
+// })
+
+// If you want to search for specific tasks, add the search criteria inside the find method's object
+// For instance of looking for tasks of urgency of 3: Task.find({urgency: 3}).then(result => {...
+Task.find({}).then(result => {
+    result.forEach(task => {
+        console.log(task)
+    })
+    mongoose.connection.close()
 })
 
-task.save().then(result => {
-  console.log('task saved!')
-  mongoose.connection.close()
-})
+// task.save().then(result => {
+//   console.log('task saved!')
+//   mongoose.connection.close()
+// })
