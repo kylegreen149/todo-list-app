@@ -42,11 +42,11 @@ app.get("/api/tasks", (req, res) => {
     })
 })
 
-app.get("/api/tasks/:id", (req, res) => {
+app.get("/api/tasks/:id", (req, res, next) => {
     const id = req.params.id
     Task.findById(id).then(task => {
         task ? res.status(200).json(task) : res.status(404).end("Task not found")
-    })
+    }).catch(error => next(error))
 })
 
 app.post("/api/tasks", (req, res) => {
@@ -75,12 +75,24 @@ app.delete("/api/tasks/:id", (req, res) => {
     })
 })
 
+// Error handling middleware
+const errorHandler = (error, req, res, next) => {
+    console.error(error.message)
+    if (error.name === 'CastError') {
+        return res.status(400).send({ error: 'malformatted id' })
+    }
+    next(error)
+}
+
+app.use(errorHandler)
+
 // Put this middleware after all request in case all fail, shown if link is invalid
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
 app.use(unknownEndpoint)
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
