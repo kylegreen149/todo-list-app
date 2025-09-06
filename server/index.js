@@ -85,13 +85,6 @@ app.delete("/api/tasks/:id", (req, res) => {
     })
 })
 
-// Put this middleware after all request in case all fail, shown if link is invalid
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-
 // Error handling middleware
 const errorHandler = (error, req, res, next) => {
     console.error(error.message)
@@ -102,6 +95,14 @@ const errorHandler = (error, req, res, next) => {
 }
 
 app.use(errorHandler)
+
+// Put this middleware after all request in case all fail, shown if link is invalid
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
