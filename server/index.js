@@ -5,9 +5,19 @@ const { Task, url } = require("./models/task")
 
 const app = express() // Function that is used to create an Express application stored in the app variable
 
+app.use(express.static('dist')) // Serve static files from the 'dist' directory
 app.use(express.json()) // Middleware that parses incoming requests with JSON payloads to access data easily
 
-app.use(express.static('dist')) // Serve static files from the 'dist' directory
+
+const requestLogger = (request, response, next) => {
+    console.log('Method:', request.method)
+    console.log('Path:  ', request.path)
+    console.log('Body:  ', request.body)
+    console.log('---')
+    next() // Call the next middleware function in the stack  
+}
+app.use(requestLogger) // Middleware to log details of each incoming request
+
 
 // const cors = require('cors') // Import CORS package to handle cross-origin requests
 // app.use(cors()) // Use CORS middleware to allow cross-origin requests
@@ -75,6 +85,13 @@ app.delete("/api/tasks/:id", (req, res) => {
     })
 })
 
+// Put this middleware after all request in case all fail, shown if link is invalid
+const unknownEndpoint = (request, response) => {
+  response.status(404).send({ error: 'unknown endpoint' })
+}
+
+app.use(unknownEndpoint)
+
 // Error handling middleware
 const errorHandler = (error, req, res, next) => {
     console.error(error.message)
@@ -85,14 +102,6 @@ const errorHandler = (error, req, res, next) => {
 }
 
 app.use(errorHandler)
-
-// Put this middleware after all request in case all fail, shown if link is invalid
-const unknownEndpoint = (request, response) => {
-  response.status(404).send({ error: 'unknown endpoint' })
-}
-
-app.use(unknownEndpoint)
-
 
 const PORT = process.env.PORT
 app.listen(PORT, () => {
