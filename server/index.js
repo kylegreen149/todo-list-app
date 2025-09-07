@@ -27,19 +27,6 @@ const mongoose = require("mongoose")
 mongoose.set('strictQuery', false)
 mongoose.connect(url)
 
-const taskSchema = new mongoose.Schema({
-    name: String,
-    urgency: Number,
-})
-
-taskSchema.set('toJSON', {
-    transform: (document, returnedObject) => {
-        returnedObject.id = returnedObject._id.toString()
-        delete returnedObject._id
-        delete returnedObject.__v
-    }
-})
-
 // const Task = mongoose.model('Task', taskSchema)
 
 app.get("/", (req, res) => {
@@ -59,19 +46,16 @@ app.get("/api/tasks/:id", (req, res, next) => {
     }).catch(error => next(error))
 })
 
-app.post("/api/tasks", (req, res) => {
+app.post("/api/tasks", (req, res, next) => {
     const body = req.body // The body of the request can be accessed through the request object
     // console.log(body)
-    if (!body.name || !body.urgency) {
-        return res.status(400).json({ error: "name or urgency missing" })
-    }
     const task = new Task({
         name: body.name,
         urgency: body.urgency
     })
     task.save().then(savedTask => {
         res.status(201).json(savedTask)
-    })
+    }).catch(error => next(error))
 })
 
 app.put("/api/tasks/:id", (req, res, next) => {
@@ -109,6 +93,8 @@ const errorHandler = (error, req, res, next) => {
     console.error(error.message)
     if (error.name === 'CastError') {
         return res.status(400).send({ error: 'malformatted id' })
+    } else if (error.name === 'ValidationError') {
+        return res.status(400).json({ error: error.message })
     }
     next(error)
 }

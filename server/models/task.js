@@ -6,8 +6,17 @@ console.log('MongoDB URL:', url)
 
 // Schema used to show how data is stored/ordered in the database
 const taskSchema = new mongoose.Schema({
-    name: String,
-    urgency: Number,
+    name: {
+        type: String,
+        minLength: 3,
+        required: true
+    },
+    urgency: {
+        type: Number,
+        min: 1,
+        max: 3,
+        required: true
+    }
 })
 
 // Change ids from object to string format the time of JSON conversion
